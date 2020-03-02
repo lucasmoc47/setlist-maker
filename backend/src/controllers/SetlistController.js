@@ -19,5 +19,16 @@ module.exports = {
 			})
 
 		return (res.json(setlist))
+	},
+
+	async show(req, res) {
+		const _id = req.params.setlist_id
+
+		const setlist = await Setlist.findById({ _id }).catch(err => console.log('setlist not found!'))
+
+		if(!setlist)
+			return res.status(404).json({ error: 'setlist not found!' })
+
+		return res.json(setlist)
 	}
 }
