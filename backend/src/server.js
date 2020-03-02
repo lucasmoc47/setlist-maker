@@ -12,5 +12,6 @@ mongoose.connect(process.env.MONGO_URL, {
 	useUnifiedTopology: true
 })
 
+app.use(express.json())
 app.use(routes)
 app.listen(process.env.PORT || 3333)
