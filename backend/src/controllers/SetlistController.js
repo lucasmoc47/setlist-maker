@@ -24,7 +24,9 @@ module.exports = {
 	async show(req, res) {
 		const _id = req.params.setlist_id
 
-		const setlist = await Setlist.findById({ _id }).catch(err => console.log(err))
+		const setlist = await Setlist
+			.findById({ _id })
+			.catch(err => console.log(err))
 
 		if(!setlist)
 			return res.status(404).json({ error: 'setlist not found!' })
@@ -41,8 +43,21 @@ module.exports = {
 			.catch(err => console.log(err))
 
 		if(!response.n)
-			return res.status(400).json({ error: 'setlist not found!' })
+			return res.status(404).json({ error: 'setlist not found!' })
 		
 		return res.status(200).json({ message: 'setlist updated!' })
+	},
+
+	async delete(req, res) {
+		const _id = req.params.setlist_id
+
+		const response = await Setlist
+			.deleteOne({ _id })
+			.catch(err => console.log(err))
+
+		if(!response.n)
+			return res.status(404).json({ error: 'setlist not found!' })
+
+		return res.status(200).json({ message: 'item deleted!' })
 	}
 }
