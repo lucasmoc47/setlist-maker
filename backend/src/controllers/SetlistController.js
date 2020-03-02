@@ -24,11 +24,25 @@ module.exports = {
 	async show(req, res) {
 		const _id = req.params.setlist_id
 
-		const setlist = await Setlist.findById({ _id }).catch(err => console.log('setlist not found!'))
+		const setlist = await Setlist.findById({ _id }).catch(err => console.log(err))
 
 		if(!setlist)
 			return res.status(404).json({ error: 'setlist not found!' })
 
 		return res.json(setlist)
+	},
+
+	async update(req, res) {
+		const _id = req.params.setlist_id
+		const { name, songs } = req.body
+
+		const response = await Setlist
+			.updateOne({ _id }, { name, songs })
+			.catch(err => console.log(err))
+
+		if(!response.n)
+			return res.status(400).json({ error: 'setlist not found!' })
+		
+		return res.status(200).json({ message: 'setlist updated!' })
 	}
 }
