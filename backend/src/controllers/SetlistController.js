@@ -18,7 +18,7 @@ module.exports = {
 				songs
 			})
 
-		return (res.json(setlist))
+		return res.json(setlist)
 	},
 
 	async show(req, res) {
@@ -29,7 +29,7 @@ module.exports = {
 			.catch(err => console.log(err))
 
 		if(!setlist)
-			return res.status(404).json({ error: 'setlist not found!' })
+			return res.status(204).json({ error: 'setlist not found!' })
 
 		return res.json(setlist)
 	},
@@ -43,9 +43,9 @@ module.exports = {
 			.catch(err => console.log(err))
 
 		if(!response.n)
-			return res.status(404).json({ error: 'setlist not found!' })
+			return res.status(204).json({ error: 'setlist not found!' })
 		
-		return res.status(200).json({ message: 'setlist updated!' })
+		return res.json({ message: 'setlist updated!' })
 	},
 
 	async delete(req, res) {
@@ -56,8 +56,8 @@ module.exports = {
 			.catch(err => console.log(err))
 
 		if(!response.n)
-			return res.status(404).json({ error: 'setlist not found!' })
+			return res.status(204).json({ error: 'setlist not found!' })
 
-		return res.status(200).json({ message: 'item deleted!' })
+		return res.json({ message: 'item deleted!' })
 	}
 }
