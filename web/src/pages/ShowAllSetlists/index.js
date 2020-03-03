@@ -19,8 +19,14 @@ export default function Index() {
 		getSetlists()
 	}, [])
 
-	function handleDelete(setlist_id) {
-		console.log(setlist_id)
+	function handleDelete(setlist) {
+		const confirmation = window.confirm(`Delete the setlist ${setlist.name}?`)
+
+		if(confirmation){
+			api.deleteSetlist(setlist._id)
+		}
+
+		getSetlists()
 	}
 
 	return (
@@ -32,7 +38,7 @@ export default function Index() {
 						<li key={setlist.name}>
 							<span>{setlist.name}</span>
 							<i className="editIcon" onClick={() => {}}>edit</i>
-							<i className="deleteIcon" onClick={() => handleDelete(setlist._id)}>delete</i>
+							<i className="deleteIcon" onClick={() => handleDelete(setlist)}>delete</i>
 						</li>
 					))}
 				</ul>
