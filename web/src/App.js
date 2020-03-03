@@ -1,12 +1,12 @@
 import React from 'react';
 import './App.css';
 
-import Index from './pages/Index'
+import ShowAllSetlists from './pages/ShowAllSetlists'
 
 function App() {
 	return (
 		<div className="App">
-			<Index />
+			<ShowAllSetlists />
 		</div>
 	);
 }
