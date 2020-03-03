@@ -25,7 +25,7 @@ export default function Index() {
 
 	return (
 		<div>
-			<NavBar />
+			<NavBar title="SETLISTS"/>
 			<div>
 				<ul>
 					{setlists.map(setlist => (
