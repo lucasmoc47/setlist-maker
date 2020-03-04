@@ -1,15 +1,12 @@
 import React from 'react';
-import './App.css';
 
-import ShowAllSetlists from './pages/ShowAllSetlists'
-import NewSetlist from './pages/NewSetlist'
+import Routes from './routes'
+
+import './App.css';
 
 function App() {
 	return (
-		<div className="App">
-			<ShowAllSetlists />
-			<NewSetlist />
-		</div>
+		<Routes />
 	);
 }
 
