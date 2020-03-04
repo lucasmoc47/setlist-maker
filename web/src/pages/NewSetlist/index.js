@@ -3,7 +3,9 @@ import React, { useState } from 'react';
 import api from '../../services/api'
 import { v4 as uuidv4 } from 'uuid'
 
-export default function NewSetlist() {
+import NavBar from '../../components/NavBar'
+
+export default function NewSetlist({ history }) {
 	const [name, setName] = useState('')
 	const [songs, setSongs] = useState([])
 	const [song, setSong] = useState({ title: '', id: null, duration: null })
@@ -38,18 +40,25 @@ export default function NewSetlist() {
 	function handleSetlistSubmit(e) {
 		e.preventDefault()
 
-		const noIdSongs = songs.map(song => song.title)
+		if (songs.length) {
+			const noIdSongs = songs.map(song => song.title)
 
-		const setlistItem = {
-			name,
-			noIdSongs
+			const setlistItem = {
+				name,
+				noIdSongs
+			}
+
+			api.createSetlist(setlistItem)
+
+			history.push('/setlists')
+
+/* 			setName('')
+			setSongs([])
+			setSong({ title: '', id: null, duration: null }) */
 		}
-
-		api.createSetlist(setlistItem)
-
-		setName('')
-		setSongs([])
-		setSong({ title: '', id: null, duration: null })
+		else{
+			alert('Empty setlist!')
+		}
 	}
 
 	function handleSetlistClear(e) {
@@ -61,38 +70,41 @@ export default function NewSetlist() {
 	}
 
 	return (
-		<form className="setlistForm" onSubmit={handleSetlistSubmit}>
-			<label htmlFor="setlistName">SETLIST NAME</label>
-			<input
-				type="text"
-				id="setlistName"
-				value={name}
-				onChange={e => setName(e.target.value)}
-				placeholder="SetList Name"
-				required
-			/>
-
-			<div className="songInput">
+		<>
+			<NavBar title="NEW SETLIST" leftItem="back" />
+			<form className="setlistForm" onSubmit={handleSetlistSubmit}>
+				<label htmlFor="setlistName">SETLIST NAME</label>
 				<input
 					type="text"
-					value={song.title}
-					onChange={e => setSong({title: e.target.value})}
-					placeholder="Song Name"
+					id="setlistName"
+					value={name}
+					onChange={e => setName(e.target.value)}
+					placeholder="SetList Name"
+					required
 				/>
 
-				<button onClick={handleSongSubmit}>ADD SONG</button>
-			</div>
+				<div className="songInput">
+					<input
+						type="text"
+						value={song.title}
+						onChange={e => setSong({ title: e.target.value })}
+						placeholder="Song Name"
+					/>
 
-			{songs.map(song => (
-				<div key={song.id} style={{ display: 'flex' }}>
-					<p>{song.title}</p>
-					<button onClick={(e) => handleSongEdit(e, song.id)}>edit</button>
-					<button onClick={(e) => handleSongDelete(e, song.id)}>delete</button>
+					<button onClick={handleSongSubmit}>ADD SONG</button>
 				</div>
-			))}
 
-			<button type="submit">SAVE</button>
-			<button onClick={handleSetlistClear}>CLEAR</button>
-		</form>
+				{songs.map(song => (
+					<div key={song.id} style={{ display: 'flex' }}>
+						<p>{song.title}</p>
+						<button onClick={(e) => handleSongEdit(e, song.id)}>edit</button>
+						<button onClick={(e) => handleSongDelete(e, song.id)}>delete</button>
+					</div>
+				))}
+
+				<button type="submit">SAVE</button>
+				<button onClick={handleSetlistClear}>CLEAR</button>
+			</form>
+		</>
 	);
 }
