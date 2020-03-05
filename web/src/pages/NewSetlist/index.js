@@ -13,10 +13,15 @@ export default function NewSetlist({ history }) {
 	function handleSongSubmit(e) {
 		e.preventDefault()
 
-		song.id = uuidv4()
+		if (song.title === '') {
+			alert('The song must have a title!')
+		}
+		else {
+			song.id = uuidv4()
 
-		setSongs([...songs, song])
-		setSong({ title: '', id: null, duration: null })
+			setSongs([...songs, song])
+			setSong({ title: '', id: null, duration: null })
+		}
 	}
 
 	function handleSongEdit(e, id) {
@@ -37,7 +42,7 @@ export default function NewSetlist({ history }) {
 		setSongs(filteredSongs)
 	}
 
-	function handleSetlistSubmit(e) {
+	async function handleSetlistSubmit(e) {
 		e.preventDefault()
 
 		if (songs.length) {
@@ -48,15 +53,15 @@ export default function NewSetlist({ history }) {
 				noIdSongs
 			}
 
-			api.createSetlist(setlistItem)
+			await api.createSetlist(setlistItem)
 
 			history.push('/setlists')
 
-/* 			setName('')
-			setSongs([])
-			setSong({ title: '', id: null, duration: null }) */
+			/* 			setName('')
+						setSongs([])
+						setSong({ title: '', id: null, duration: null }) */
 		}
-		else{
+		else {
 			alert('Empty setlist!')
 		}
 	}
@@ -71,7 +76,7 @@ export default function NewSetlist({ history }) {
 
 	return (
 		<>
-			<NavBar title="NEW SETLIST" leftItem="back" />
+			<NavBar title="NEW SETLIST" goBack={history.goBack} />
 			<form className="setlistForm" onSubmit={handleSetlistSubmit}>
 				<label htmlFor="setlistName">SETLIST NAME</label>
 				<input

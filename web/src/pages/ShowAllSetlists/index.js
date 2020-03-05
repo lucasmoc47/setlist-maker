@@ -9,26 +9,30 @@ import NavBar from '../../components/NavBar'
 
 export default function ShowAllSetlists({ match }) {
 	const [setlists, setSetlists] = useState([])
+	const [loading, setLoading] = useState(true)
 
 	async function getSetlists() {
 		const { data } = await api.getSetlists()
 
 		setSetlists(data)
+		setLoading(false)
 	}
 
 	useEffect(() => {
 		getSetlists()
 	}, [])
 
-	function handleDelete(setlist) {
+	async function handleDelete(setlist) {
 		const confirmation = window.confirm(`Delete the setlist ${setlist.name}?`)
 
 		if (confirmation) {
-			api.deleteSetlist(setlist._id)
+			await api.deleteSetlist(setlist._id)
 		}
 
 		getSetlists()
 	}
+
+	if (loading) return "Loading"
 
 	return (
 		<div>
