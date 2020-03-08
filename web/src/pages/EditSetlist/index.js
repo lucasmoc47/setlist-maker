@@ -1,27 +1,38 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 
-import api from '../../services/api'
+import { SetlistContext } from '../../contexts/SetlistContext'
+
+import NavBar from '../../components/NavBar'
 
 import './styles.css'
 
-export default function EditSetlist({ match }) {
+export default function EditSetlist({ match, history }) {
+	const { setlists } = useContext(SetlistContext)
 	const [setlist, setSetlist] = useState({})
-
-	async function getSetlist() {
-		const _id = match.params.setlist_id
-		const response = await api.getSetlistById(_id)
-
-		if(response.data)
-			setSetlist(response.data)
-		else
-			console.log(response)
-	}
+	const [loading, setLoading] = useState({})
 
 	useEffect(() => {
-		getSetlist()
-	}, [])
+		const _id = match.params.setlist_id
+		const response = setlists.find(item => item._id === _id)
+
+		if (response){
+			setSetlist(response)
+			setLoading(false)
+		}
+		else {
+			console.log(`Error, couldn't find setlist with the id ${_id}`)
+			history.push('/setlists')
+		}
+	}, [setlists])
+
+	if(loading) return "Loading"
 
 	return (
-		<p>{setlist.name}</p>
+		<>
+			<NavBar title="EDIT SETLIST" goBack={history.goBack} />
+			<form>
+
+			</form>
+		</>
 	);
 }

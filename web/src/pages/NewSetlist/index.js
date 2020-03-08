@@ -1,11 +1,13 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 
-import api from '../../services/api'
+import { SetlistContext } from '../../contexts/SetlistContext'
+
 import { v4 as uuidv4 } from 'uuid'
 
 import NavBar from '../../components/NavBar'
 
 export default function NewSetlist({ history }) {
+	const { createSetlist } = useContext(SetlistContext)
 	const [name, setName] = useState('')
 	const [songs, setSongs] = useState([])
 	const [song, setSong] = useState({ title: '', id: null, duration: null })
@@ -42,18 +44,18 @@ export default function NewSetlist({ history }) {
 		setSongs(filteredSongs)
 	}
 
-	async function handleSetlistSubmit(e) {
+	function handleSetlistSubmit(e) {
 		e.preventDefault()
 
 		if (songs.length) {
-			const noIdSongs = songs.map(song => song.title)
+			const noIdSongs = songs.map(song => ({ title: song.title }))
 
-			const setlistItem = {
+			const setlist = {
 				name,
-				noIdSongs
+				songs: noIdSongs
 			}
 
-			await api.createSetlist(setlistItem)
+			createSetlist(setlist)
 
 			history.push('/setlists')
 

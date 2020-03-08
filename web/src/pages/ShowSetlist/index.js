@@ -1,32 +1,31 @@
-import React, { useState, useEffect } from 'react';
-
-import api from '../../services/api'
+import React, { useState, useEffect, useContext } from 'react';
 
 import NavBar from '../../components/NavBar'
+
+import { SetlistContext } from '../../contexts/SetlistContext'
 
 // import { Container } from './styles';
 
 export default function ShowSetlist({ match, history }) {
+	const { setlists } = useContext(SetlistContext)
 	const [setlist, setSetlist] = useState({})
 	const [loading, setLoading] = useState(true)
 
-	async function getSetlist() {
+	useEffect(() => {
 		const _id = match.params.setlist_id
-		const response = await api.getSetlistById(_id)
+		const response = setlists.find(item => item._id === _id)
 
-		if (response.data){
-			setSetlist(response.data)
+		if (response){
+			setSetlist(response)
 			setLoading(false)
 		}
-		else
-			console.log(response)
-	}
+		else {
+			console.log(`Error, couldn't find setlist with the id ${_id}`)
+			history.push('/setlists')
+		}
+	}, [setlists])
 
-	useEffect(() => {
-		getSetlist()
-	}, [])
-
-	if(loading) return 'Loading'
+	if(loading) return "Loading"
 
 	return (
 		<>
