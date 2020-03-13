@@ -23,7 +23,7 @@ export default function ShowSetlist({ match, history }) {
 			console.log(`Error, couldn't find setlist with the id ${_id}`)
 			history.push('/setlists')
 		}
-	}, [setlists])
+	}, [setlists, history, match.params.setlist_id])
 
 	if(loading) return "Loading"
 

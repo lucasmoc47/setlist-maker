@@ -16,18 +16,23 @@ export default function ShowAllSetlists({ match }) {
 	return (
 		<div>
 			<NavBar title="SETLISTS" leftItem="logo" />
-			<div>
+			<div className="setlists">
 				<ul>
 					{setlists.map(setlist => (
-						<li key={setlist.name}>
+						<li key={setlist.name} className="setlist-item">
 							<Link to={`${match.path}/${setlist._id}`}>{setlist.name}</Link>
-							<Link to={`${match.path}/edit/${setlist._id}`}>edit</Link>
-							<i className="deleteIcon" onClick={() => handleDelete(setlist)}>delete</i>
+							<Link to={`${match.path}/edit/${setlist._id}`}>
+								<i className="fas fa-pen" />
+							</Link>
+							<i
+								className="fas fa-trash"
+								onClick={() => handleDelete(setlist)}
+							/>
 						</li>
 					))}
 				</ul>
+				<Link to="/new_setlist">NEW SETLIST</Link>
 			</div>
-			<Link to="/new_setlist">NEW SETLIST</Link>
 		</div>
 	);
 }

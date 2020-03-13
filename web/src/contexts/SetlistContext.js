@@ -7,6 +7,10 @@ export const SetlistContext = createContext()
 export function SetlistProvider(props) {
 	const [setlists, setSetlists] = useState([])
 	const [loading, setLoading] = useState(true)
+	
+	useEffect(() => {
+		getSetlists()
+	}, [])
 
 	async function getSetlists() {
 		const { data } = await api.getSetlists()
@@ -30,18 +34,14 @@ export function SetlistProvider(props) {
 		}
 	}
 
-	useEffect(() => {
-		getSetlists()
-	}, [])
-
 	async function handleDelete(setlist) {
 		const confirmation = window.confirm(`Delete the setlist ${setlist.name}?`)
 
 		if (confirmation) {
 			await api.deleteSetlist(setlist._id)
+			getSetlists()
 		}
-
-		getSetlists()
+		
 	}
 
 	return (

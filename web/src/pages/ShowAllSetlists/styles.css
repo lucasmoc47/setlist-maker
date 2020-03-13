@@ -1,3 +1,10 @@
-.editIcon, .deleteIcon {
-	margin-left: 10px;
+.setlists a {
+	text-decoration: none;
+}
+
+.setlists a:focus, 
+.setlists a:hover, 
+.setlists a:visited,
+.setlists a:link {
+	color: black;
 }

@@ -5,16 +5,15 @@ import { SetlistContext } from '../../contexts/SetlistContext'
 import { v4 as uuidv4 } from 'uuid'
 
 import NavBar from '../../components/NavBar'
+import Song from '../../components/Song'
 
 export default function NewSetlist({ history }) {
 	const { createSetlist } = useContext(SetlistContext)
 	const [name, setName] = useState('')
 	const [songs, setSongs] = useState([])
-	const [song, setSong] = useState({ title: '', id: null, duration: null })
+	const [song, setSong] = useState({ title: '', id: null })
 
-	function handleSongSubmit(e) {
-		e.preventDefault()
-
+	function handleSongSubmit() {
 		if (song.title === '') {
 			alert('The song must have a title!')
 		}
@@ -22,28 +21,10 @@ export default function NewSetlist({ history }) {
 			song.id = uuidv4()
 
 			setSongs([...songs, song])
-			setSong({ title: '', id: null, duration: null })
+			setSong({ title: '', id: null })
 		}
 	}
-
-	function handleSongEdit(e, id) {
-		e.preventDefault()
-
-		const filteredSongs = songs.filter(song => song.id !== id)
-		const selectedSong = songs.find(song => song.id === id)
-
-		setSong(selectedSong)
-		setSongs(filteredSongs)
-	}
-
-	function handleSongDelete(e, id) {
-		e.preventDefault()
-
-		const filteredSongs = songs.filter(song => song.id !== id)
-
-		setSongs(filteredSongs)
-	}
-
+	
 	function handleSetlistSubmit(e) {
 		e.preventDefault()
 
@@ -58,10 +39,6 @@ export default function NewSetlist({ history }) {
 			createSetlist(setlist)
 
 			history.push('/setlists')
-
-			/* 			setName('')
-						setSongs([])
-						setSong({ title: '', id: null, duration: null }) */
 		}
 		else {
 			alert('Empty setlist!')
@@ -73,7 +50,7 @@ export default function NewSetlist({ history }) {
 
 		setName('')
 		setSongs([])
-		setSong({ title: '', id: null, duration: null })
+		setSong({ title: '', id: null })
 	}
 
 	return (
@@ -98,15 +75,19 @@ export default function NewSetlist({ history }) {
 						placeholder="Song Name"
 					/>
 
-					<button onClick={handleSongSubmit}>ADD SONG</button>
+					<i 
+						className="fas fa-plus"
+						onClick={handleSongSubmit}
+					/>
 				</div>
-
+				
 				{songs.map(song => (
-					<div key={song.id} style={{ display: 'flex' }}>
-						<p>{song.title}</p>
-						<button onClick={(e) => handleSongEdit(e, song.id)}>edit</button>
-						<button onClick={(e) => handleSongDelete(e, song.id)}>delete</button>
-					</div>
+					<Song 
+						key={song.id} 
+						song={song} 
+						songs={songs}
+						setSongs={setSongs}
+					/>
 				))}
 
 				<button type="submit">SAVE</button>
